@@ -22,9 +22,11 @@ $(document).ready(function() {
         wrongGuesses = 0;
         $('#hangman-image').attr('src', hangmanImages[wrongGuesses]);
         $('#word-display').text("_ ".repeat(selectedWord.length));
-        $('#letter-buttons').empty();
         $('#restart-btn').hide();
+        $('#guessed-letters').text("");
         $('#letter-input').prop("disabled", false);
+        $('#end-message').hide(); 
+        $('#overlay').addClass('d-none');
     }
 
     function guessLetter(letter) {
@@ -40,13 +42,9 @@ $(document).ready(function() {
         }
 
         if (wrongGuesses === maxWrongGuesses) {
-            alert("Perdiste! La palabra era " + selectedWord);
-            $('#letter-input').prop("disabled", true);
-            $('#restart-btn').show();
+            showEndMessage(false); 
         } else if (isWordGuessed()) {
-            alert("¡Ganaste! La palabra era " + selectedWord);
-            $('#letter-input').prop("disabled", true);
-            $('#restart-btn').show();
+            showEndMessage(true); 
         }
     }
 
@@ -59,6 +57,21 @@ $(document).ready(function() {
 
     function isWordGuessed() {
         return selectedWord.split("").every(letter => guessedLetters.includes(letter));
+    }
+
+    function showEndMessage(isWin) {
+        if (isWin) {
+            $('#end-message-title').text("¡Ganaste!");
+        } else {
+            $('#end-message-title').text("¡Perdiste!");
+        }
+
+        $('#selected-word').text(selectedWord); 
+        $('#overlay').show();
+        $('#overlay').removeClass('d-none');
+        $('#end-message').show();
+        $('#letter-input').prop("disabled", true);
+        $('#restart-btn').show();
     }
 
     $('#letter-input').on('input', function() {

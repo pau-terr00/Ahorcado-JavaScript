@@ -20,6 +20,7 @@ $(document).ready(function () {
         $('#letter-input').prop("disabled", false);
         $('#restart-btn').hide();
         $('#letter-input').val("");
+        $('#guess-btn').prop("disabled", false);
     }
 
     function guessLetter(letter) {
@@ -35,6 +36,7 @@ $(document).ready(function () {
                 alert("Perdiste! La palabra era " + selectedWord);
                 $('#letter-input').prop("disabled", true);
                 $('#restart-btn').show();
+                $('#guess-btn').prop("disabled", true);
             }
         }
 
