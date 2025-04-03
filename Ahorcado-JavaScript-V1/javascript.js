@@ -21,29 +21,26 @@ $(document).ready(function () {
         $('#restart-btn').hide();
         $('#letter-input').val("");
         $('#guess-btn').prop("disabled", false);
+        $('#overlay').addClass('d-none');
+        updateAttemptsDisplay();
     }
 
     function guessLetter(letter) {
         if (guessedLetters.includes(letter)) return; 
         guessedLetters.push(letter);
         $('#guessed-letters').text(guessedLetters.join(", "));
-
+        
         if (selectedWord.includes(letter)) {
             updateWordDisplay();
         } else {
             wrongGuesses++;
-            if (wrongGuesses === maxWrongGuesses) {
-                alert("Perdiste! La palabra era " + selectedWord);
-                $('#letter-input').prop("disabled", true);
-                $('#restart-btn').show();
-                $('#guess-btn').prop("disabled", true);
-            }
+            updateAttemptsDisplay();
         }
 
-        if (isWordGuessed()) {
-            alert("¡Ganaste! La palabra era " + selectedWord);
-            $('#letter-input').prop("disabled", true);
-            $('#restart-btn').show();
+        if (wrongGuesses === maxWrongGuesses) {
+            showEndMessage(false); 
+        } else if (isWordGuessed()) {
+            showEndMessage(true); 
         }
     }
 
@@ -54,6 +51,24 @@ $(document).ready(function () {
         $('#word-display').text(displayWord);
     }
 
+    function updateAttemptsDisplay() {
+        $('#attempts-display').text(wrongGuesses + '/' + maxWrongGuesses);
+    }
+
+    function showEndMessage(isWin) {
+        if (isWin) {
+            $('#end-message-title').text("¡Ganaste!");
+        } else {
+            $('#end-message-title').text("¡Perdiste!");
+        }
+
+        $('#selected-word').text(selectedWord); 
+        $('#overlay').removeClass('d-none');
+        $('#end-message').show();
+        $('#letter-input').prop("disabled", true);
+        $('#restart-btn').show();
+    }
+
     function isWordGuessed() {
         return selectedWord.split("").every(letter => guessedLetters.includes(letter));
     }
@@ -62,7 +77,7 @@ $(document).ready(function () {
     $('#guess-btn').click(function () {
         let letter = $('#letter-input').val().toLowerCase();
 
-        if (letter.length === 1 && /^[a-zA-Z]$/.test(letter)) {
+        if (letter.length == 1 && /^[a-zA-Z]$/.test(letter)) {
             guessLetter(letter);
             $('#letter-input').val("");
         } else {

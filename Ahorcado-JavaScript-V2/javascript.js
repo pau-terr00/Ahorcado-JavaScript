@@ -67,7 +67,6 @@ $(document).ready(function() {
         }
 
         $('#selected-word').text(selectedWord); 
-        $('#overlay').show();
         $('#overlay').removeClass('d-none');
         $('#end-message').show();
         $('#letter-input').prop("disabled", true);
@@ -77,7 +76,7 @@ $(document).ready(function() {
     $('#letter-input').on('input', function() {
         let letter = $(this).val().toLowerCase();
 
-        if (letter.length === 1 && /^[a-zA-Z]$/.test(letter)) {
+        if (letter.length == 1 && /^[a-zA-Z]$/.test(letter)) {
             guessLetter(letter);
             $(this).val("");
         }
